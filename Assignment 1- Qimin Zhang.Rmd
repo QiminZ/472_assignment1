@@ -1,0 +1,96 @@
+---
+title: "Assignment 1"
+author: "Qimin Zhang 202310601"
+date: "October 11 2023"
+output: html_document
+---
+
+```{r setup, include=FALSE} 
+# this chunk contains code that sets global options for the entire .Rmd. 
+# we use include=FALSE to suppress it from the top of the document, but it will still appear in the appendix. 
+
+knitr::opts_chunk$set(echo = FALSE) # actually set the global chunk options. 
+# we set echo=FALSE to suppress code such that it by default does not appear throughout the document. 
+# note: this is different from .Rmd default
+```
+
+### Exercise 1
+
+“My forked version of the assignment template repository can be found at https://github.com/QiminZ/472_assignment1".
+
+### Exercise 2 
+
+Here, I will present my choice of the dataset "Orange" is "tidy" and explain the reason why. I will also use R to create an untidy version in a long format.
+
+```{r ex2.1}
+
+# Load the package
+library(tidyverse)
+
+# Load the built-in dataset "Orange"
+data("Orange")
+
+# Print the first few rows of the "Orange" dataset
+head(Orange)
+
+```
+
+This is the output of the dataset "Orange". According to the output, the built-in dataset "Orange" is a "tidy" dataset. It meets the three basic rules of "tidy data" (Hadley Wickham):
+
+1. Each variable must have its own column: Each column in the dataset represents a different variable, such as "Tree" (the number of the orange tree), "Age" (the age of the orange tree), and "Circumference" (the circumference of the tree).
+
+2. Each observation must have its own row: each row represents a different observation, that is, a different orange tree. The data in each row are observations about these trees.
+
+3. Each value must have its own cell: each cell contains a single value. For example, each cell contains the age or circumference of a tree.
+
+Therefore, the "Orange" dataset is a "tidy" dataset according to the "tidy" data criteria.
+
+```{r ex2.2}
+
+# Convert data from wide to long format
+Orange_untidy <- Orange %>%
+  pivot_longer(c('age', 'circumference'),
+                  names_to = "Measurement",values_to = "Value")
+
+# Print the first few rows of the Orange_untidy dataset
+head(Orange_untidy)
+```
+
+This is the long format of the original dataset "Orange". The converted dataset Orange_untidy contains three columns: "Tree", "Measurement" and "Value".
+
+Compared to the original dataset, the dataset "Orange_untidy" is now "untidy". This is because each observation is no longer in one row, but scattered in different rows. The newly created column "Measurement" contains the columns "Age" and "Circumference" from the original dataset. The observations "Age" and "Circumference", which corresponded to each row in the original dataset, are dispersed into two rows in the new "Orange_untidy" dataset.
+
+### Exercise 3
+
+```{r ex3, echo = TRUE}
+
+# Load the built-in dataset "ChickWeight"
+data("ChickWeight")
+
+# Print the first few rows of the "ChickWeight" dataset
+head(ChickWeight)
+
+# Group the data by Chick
+transformed_ChickWeight <- ChickWeight %>%
+  group_by(Chick) %>%
+  
+# Caulculate the average weight, max weight, average time and max time for each group
+  summarise(
+    mean_weight = mean(weight),
+    max_weight = max(weight),
+    mean_time = mean(Time),
+    max_time = max(Time)
+  )
+
+# Print the first few rows of the "transformed_ChickWeight" dataset
+head(transformed_ChickWeight)
+```
+
+Here are the summary statistics for each group of chicks. The converted data provides the average weight, average time as well as the maximum weight and max time for each group of chicks. By summarizing the data for each group of chicks, it is now possible to see how the different chicks performed in terms of body weight and the time it took them to reach their maximum weight. This can provide an understanding of changes in chick growth patterns and how long it takes different chicks to reach peak body weight. Such information can help determine whether some chicks reach peak body weight more quickly than others. In addition, by analyzing the "mean_weight" and "mean_time" columns, we can determine the average weight and average growth time of each group of chicks.
+
+## Appendix: All code in this assignment
+
+```{r ref.label=knitr::all_labels(), echo=TRUE, eval=FALSE} 
+# this chunk generates the complete code appendix. 
+# eval=FALSE tells R not to run (``evaluate'') the code here (it was already run before).
+```
